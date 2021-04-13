@@ -2,14 +2,14 @@ import React from 'react'
 import Announcement from './Announcement'
 import { useState } from 'react'
 import ValidUsers from './ValidUsers'
-import Authenticate from './Authenticate'
 
- const Announcements = ({onAdd}) => {
-    const [message, setText] = useState('')
-    const [person,setPerson] = useState('')
-    const [verified, setV] = useState(true);
+ const Announcements = ({onAdd, showSubmit, tryVerify}) => {
+    const [message, setText] = useState('')//message for new post
+    const [person,setPerson] = useState('')//person for new post
+
+    const [attempt, setAttempt] = useState('');//token attempt from user
   
-    const onSubmit = (e) => {
+    const onSubmit = (e) => { // this method tries to send the necessary information such as an object of message, person and see if the attempt is valid
       e.preventDefault()
   
       if (!message) {
@@ -18,25 +18,25 @@ import Authenticate from './Authenticate'
       }
   
       onAdd({ message , person })
-  
+      isVerified(attempt)
       setText('')
       setPerson('')
+      setAttempt('')
     }
   
-    const isVerified = (possibleId) => {
-        for (const user in ValidUsers){
-            if(possibleId === user.id){
-                <h1> Verified !</h1>
-                setV(!verified)
-            }
-        }
-
-    }
+    const isVerified = (possibleId) => { // NOT WORKING // trying to verify the user and make a boolean value
+      for (const user in ValidUsers){
+          if(possibleId === user.id){
+              <h1> Verified !</h1>
+              tryVerify();
+          }
+      }
+  
+  }
 
     
     return (
       <form className='add-form' onSubmit={onSubmit}>
-          <Authenticate onTry={isVerified}/>
         <div className='form-control'>
           <label>Message</label>
           <input
@@ -55,8 +55,17 @@ import Authenticate from './Authenticate'
             onChange={(e) => setPerson(e.target.value)}
           />
         </div>
-
-        {verified && <input type='submit' value='Save Message' className='btn' />}
+        <div className='form-control'>
+          <label>Verification</label>
+          <label> {attempt}</label>
+          <input
+            type='text'
+            placeholder='Add Token'
+            value={attempt}
+            onChange={(e) => setAttempt(e.target.value)}
+          />
+        </div>
+       <input type='submit' value='Save Message' className='btn' />
       </form>
     )
 }
