@@ -6,4 +6,4 @@ After installing github desktop, clone the repository.
 
 Then using the terminal go to the directory with the react js project. Type in npm i
 Cd into compsci and type in npm start. 
-The website should pop up
+The website should pop up. Yay!
